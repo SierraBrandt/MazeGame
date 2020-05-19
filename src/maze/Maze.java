@@ -104,13 +104,17 @@ public class Maze extends JFrame implements Runnable {
 
             public void keyPressed(KeyEvent e) {
                 if (e.VK_UP == e.getKeyCode()) {
-
+                    columnDir = 0;
+                    rowDir = -1;
                 } else if (e.VK_DOWN == e.getKeyCode()) {
-
+                    columnDir = 0;
+                    rowDir = 1;
                 } else if (e.VK_LEFT == e.getKeyCode()) {
-
+                    columnDir = -1;
+                    rowDir = 0;
                 } else if (e.VK_RIGHT == e.getKeyCode()) {
-
+                    columnDir = 1;
+                    rowDir = 0;
                 }
                 repaint();
             }
@@ -240,7 +244,14 @@ public class Maze extends JFrame implements Runnable {
             reset();
         }
         
-        
+        if (board[currentRow+rowDir][currentColumn+columnDir] == PATH)
+        {
+        currentRow += rowDir;
+        currentColumn+=columnDir;
+        }
+        rowDir = 0;
+        columnDir = 0;
+
     }
 
 ////////////////////////////////////////////////////////////////////////////
