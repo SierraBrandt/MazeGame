@@ -59,6 +59,11 @@ public class Maze extends JFrame implements Runnable {
     int columnDir;
     int rowDir;
     
+    int numCoins = 10;
+    int coinRow[] = new int[numCoins];
+    int coinColumn[] = new int[numCoins];
+    boolean coinActive[] = new boolean[numCoins];
+    int coinsCollected;
     
     static Maze frame;
     public static void main(String[] args) {
@@ -194,16 +199,50 @@ public class Maze extends JFrame implements Runnable {
             }
         }
         {
-    g.setColor(Color.green);
-    g.fillRect(getX(0)+currentColumn*getWidth2()/numColumns,
-    getY(0)+currentRow*getHeight2()/numRows,
-    getWidth2()/numColumns,
-    getHeight2()/numRows);
-}
+        g.setColor(Color.green);
+        g.fillRect(getX(0)+currentColumn*getWidth2()/numColumns,
+        getY(0)+currentRow*getHeight2()/numRows,
+        getWidth2()/numColumns,
+        getHeight2()/numRows);
+        }
+        for (int i=0;i<numCoins;i++)
+        {
+        g.setColor(Color.YELLOW);
+        g.fillOval(getX(0)+coinColumn[i]*getWidth2()/numColumns,
+        getY(0)+coinRow[i]*getHeight2()/numRows,
+        getWidth2()/numColumns,
+        getHeight2()/numRows);
+        g.setColor(Color.BLACK);
+        g.drawOval(getX(0)+coinColumn[i]*getWidth2()/numColumns,
+        getY(0)+coinRow[i]*getHeight2()/numRows,
+        getWidth2()/numColumns,
+        getHeight2()/numRows);
+        }  
+        
+//        for (int i=0;i<numCoins;i++)
+//        {
+//                drawCoin(getX(coinRow[i]),getYNormal(coinColumn[i]),0,1,1);
+//        }
 
         gOld.drawImage(image, 0, 0, null);
     }
+////////////////////////////////////////////////////////////////////////////
+    public void drawCoin(int xpos,int ypos,double rot,double xscale,double yscale)
+    {
+        g.translate(xpos,ypos);
+        g.rotate(rot  * Math.PI/180.0);
+        g.scale( xscale , yscale );
+        
+        g.setColor(Color.YELLOW);
+        g.fillOval(10,10,10,10);
+        g.setColor(Color.BLACK);
+        g.drawOval(10,10,10,10);
+        g.setColor(Color.BLACK);
 
+        g.scale( 1.0/xscale,1.0/yscale );
+        g.rotate(-rot  * Math.PI/180.0);
+        g.translate(-xpos,-ypos);
+    }
 ////////////////////////////////////////////////////////////////////////////
 // needed for     implement runnable
     public void run() {
@@ -230,7 +269,19 @@ public class Maze extends JFrame implements Runnable {
         if (board[currentRow][currentColumn] == PATH)
         tryAgain = false;
         }
-
+        
+        for (int i=0;i<numCoins;i++)
+        {
+        coinActive[i]= true;
+        tryAgain = true;
+        while (tryAgain)
+            {
+            coinRow[i] = (int)(Math.random()*numRows);
+            coinColumn[i] = (int)(Math.random()*numColumns);
+            if (board[coinRow[i]][coinColumn[i]] == PATH)
+            tryAgain = false;
+            }
+        }
 
     }
 /////////////////////////////////////////////////////////////////////////
@@ -251,7 +302,7 @@ public class Maze extends JFrame implements Runnable {
         }
         rowDir = 0;
         columnDir = 0;
-
+        
     }
 
 ////////////////////////////////////////////////////////////////////////////
