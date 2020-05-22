@@ -205,25 +205,26 @@ public class Maze extends JFrame implements Runnable {
         getWidth2()/numColumns,
         getHeight2()/numRows);
         }
+  
         for (int i=0;i<numCoins;i++)
         {
-        g.setColor(Color.YELLOW);
-        g.fillOval(getX(0)+coinColumn[i]*getWidth2()/numColumns,
-        getY(0)+coinRow[i]*getHeight2()/numRows,
-        getWidth2()/numColumns,
-        getHeight2()/numRows);
-        g.setColor(Color.BLACK);
-        g.drawOval(getX(0)+coinColumn[i]*getWidth2()/numColumns,
-        getY(0)+coinRow[i]*getHeight2()/numRows,
-        getWidth2()/numColumns,
-        getHeight2()/numRows);
+            if(coinActive[i]){
+            g.setColor(Color.YELLOW);
+            g.fillOval(getX(0)+coinColumn[i]*getWidth2()/numColumns,
+            getY(0)+coinRow[i]*getHeight2()/numRows,
+            getWidth2()/numColumns,
+            getHeight2()/numRows);
+            g.setColor(Color.BLACK);
+            g.drawOval(getX(0)+coinColumn[i]*getWidth2()/numColumns,
+            getY(0)+coinRow[i]*getHeight2()/numRows,
+            getWidth2()/numColumns,
+            getHeight2()/numRows);
+            }
+            
         }  
+        g.setColor(Color.BLACK);
+        g.drawString("score = " + coinsCollected,320,48);
         
-//        for (int i=0;i<numCoins;i++)
-//        {
-//                drawCoin(getX(coinRow[i]),getYNormal(coinColumn[i]),0,1,1);
-//        }
-
         gOld.drawImage(image, 0, 0, null);
     }
 ////////////////////////////////////////////////////////////////////////////
@@ -282,7 +283,7 @@ public class Maze extends JFrame implements Runnable {
             tryAgain = false;
             }
         }
-
+        coinsCollected = 0;
     }
 /////////////////////////////////////////////////////////////////////////
     public void animate() {
@@ -303,7 +304,19 @@ public class Maze extends JFrame implements Runnable {
         rowDir = 0;
         columnDir = 0;
         
-    }
+        for (int i=0;i<numCoins;i++) //loop through all the coins.
+        {
+            if (coinActive[i]) //only check coins that have not been collected.
+            {
+                if (coinRow[i] == currentRow && coinColumn[i] == currentColumn) //if the player has just collected a coin.
+                {
+                //add 2 lines of code that show that you have collected the coin.
+                coinActive[i]=false;
+                coinsCollected++;
+                }
+            }
+        }
+        }
 
 ////////////////////////////////////////////////////////////////////////////
     public void start() {
